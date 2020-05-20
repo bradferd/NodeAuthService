@@ -5,6 +5,7 @@ const morgan = require("morgan");
 const app = express();
 const router = require("./router");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 // DB Connect
 const connectionString =
@@ -18,6 +19,7 @@ mongoose.connect(connectionString, {
 // App setup
 
 app.use(morgan("combined"));
+app.use(cors());
 app.use(express.json({ type: "*/*" }));
 router(app);
 

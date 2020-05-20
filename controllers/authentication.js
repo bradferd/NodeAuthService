@@ -3,16 +3,23 @@ const User = require("../models/user");
 const config = require("../config");
 
 function tokenForUser(user) {
-    const timestamp = new Date().getTime();
-    return jwt.sign({ sub: user.id, iat: timestamp }, config.secret);
+  const timestamp = new Date().getTime();
+  return jwt.sign({ sub: user.id, iat: timestamp }, config.secret);
 }
 
+exports.signin = function (req, res, next) {
+  // User has already had their email and password auth'd
+  // We just need to give them a token
+  res.send({ token: tokenForUser(req.user) });
+};
 
 exports.signup = function (req, res, next) {
   const { email, password } = req.body;
 
   if (!email || !password) {
-      return res.status(422).send({ error: "You must provide username and password." })
+    return res
+      .status(422)
+      .send({ error: "You must provide username and password." });
   }
 
   // See if a user with the given email exists
